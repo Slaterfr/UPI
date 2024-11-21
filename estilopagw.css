@@ -1,4 +1,31 @@
 /* General */
+
+/* Estilo responsive para la navegación */
+.nav-menu {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten a varias líneas */
+    justify-content: center; /* Centra los elementos */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    gap: 1rem; /* Espaciado entre los enlaces */
+}
+
+/* Ajustes para pantallas pequeñas */
+@media screen and (max-width: 768px) {
+    .nav-menu {
+        flex-direction: column; /* Los enlaces se apilan verticalmente */
+        align-items: center; /* Centra los enlaces verticalmente */
+    }
+
+    .nav-menu a {
+        font-size: 1rem; /* Ajusta el tamaño de la fuente */
+        padding: 0.5rem;
+        width: 100%; /* Haz que los enlaces ocupen toda la fila */
+        text-align: center; /* Centra el texto dentro del enlace */
+    }
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
