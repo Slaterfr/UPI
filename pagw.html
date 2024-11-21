@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrón de Diseño</title>
+    <link rel="stylesheet" href="estilopagw.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="nav-menu">
+            <li><a href="#introduccion">Introducción</a></li>
+            <li class="dropdown">
+                <a href="#">Más opciones</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#estructura">Estructura del Patrón</a></li>
+                    <li><a href="#ejemplo">Ejemplo en Python</a></li>
+                </ul>
+            </li>
+            <li><a href="#aplicaciones">Aplicaciones Prácticas</a></li>
+            <li><a href="#ventajas">Ventajas y Desventajas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="introduccion">
+            <h2>Introducción al Patrón Command</h2>
+            <p>
+                El patrón Command es un patrón de diseño que convierte las solicitudes o sencillas operaciones en objetos. 
+                Este patrón permite desacoplar el emisor de la solicitud de su receptor, lo que facilita la extensibilidad y la reutilización de código.
+                A través de este patrón, las solicitudes que reciben los objetos no necesitan saber cómo se ejecutan, 
+                y los objetos responsables de ejecutar la acción no necesitan saber quién está realizando la solicitud.
+            </p>
+        </section>
+
+        <section id="estructura">
+            <h2>Estructura del Patrón</h2>
+            <p>
+                El patrón Command consta de cuatro componentes principales que interactúan entre sí para permitir que una solicitud sea ejecutada de manera flexible:
+            </p>
+            <ul>
+                <li><strong>Comando:</strong> Define la interfaz común para todos los comandos. Es responsable de ejecutar la acción solicitada.</li>
+                <li><strong>Comandos Concretos:</strong> Implementan la interfaz del comando y contienen la lógica para ejecutar una acción específica.</li>
+                <li><strong>Invocador:</strong> Solicita la ejecución de un comando, pero no sabe qué acción realizará el comando.</li>
+                <li><strong>Receptor:</strong> Es el objeto que realmente realiza la acción cuando se invoca el comando.</li>
+            </ul>
+        </section>
+
+        <section id="componentes">
+            <h2>Interacción entre los Componentes del Patrón Command</h2>
+            <p>
+                A continuación, se describe cómo interactúan los distintos componentes del patrón Command:
+            </p>
+            <h3>1. Cliente (Client)</h3>
+            <p>
+                El cliente es el responsable de crear los <strong>comandos concretos</strong> y asignarlos al <strong>invocador</strong>. Además, configura el <strong>receptor</strong> de las acciones.
+            </p>
+            <ul>
+                <li><strong>Responsabilidad:</strong> El cliente configura y asocia los comandos con los invocadores, asegurando que cada comando esté asociado con el receptor adecuado.</li>
+                <li><strong>Interacción:</strong> El cliente no invoca directamente las acciones; en cambio, prepara los objetos necesarios para que el invocador pueda hacer su trabajo.</li>
+                <li><strong>Ejemplo:</strong> En una aplicación de control de dispositivos, el cliente crea los comandos para encender la luz o subir el volumen y los asigna al invocador.</li>
+            </ul>
+
+            <h3>2. Invocador (Invoker)</h3>
+            <p>
+                El invocador es el componente que solicita la ejecución de una acción, sin tener conocimiento del comando que la ejecuta. Este componente simplemente llama al método <code>execute()</code> del comando, delegando la responsabilidad de saber qué hacer al comando en sí.
+            </p>
+            <ul>
+                <li><strong>Responsabilidad:</strong> El invocador tiene la función de pedirle al comando que ejecute una acción, sin saber qué tipo de acción será o cómo se llevará a cabo.</li>
+                <li><strong>Interacción:</strong> El invocador guarda una referencia al comando, pero no interactúa directamente con el receptor. El invocador solo ejecuta la acción, delegando el detalle de la ejecución al comando.</li>
+                <li><strong>Ejemplo:</strong> En una interfaz gráfica, el invocador podría ser un botón que, cuando se presiona, pide que se ejecute una acción (como encender una luz).</li>
+            </ul>
+
+            <h3>3. Comando (Command)</h3>
+            <p>
+                El comando es una interfaz que define el método <code>execute()</code>, y todas las clases de comandos concretos deben implementar este método. El comando actúa como un contenedor para la acción a ejecutar. Cada comando especifica qué acción se va a realizar y generalmente tiene una referencia al receptor.
+            </p>
+            <ul>
+                <li><strong>Responsabilidad:</strong> El comando encapsula una solicitud o acción específica. Su principal función es ejecutar una operación en el receptor.</li>
+                <li><strong>Interacción:</strong> El comando no sabe nada acerca del invocador, solo sabe cómo ejecutar su acción asociada. Dentro del comando existe una referencia a un receptor, que es el encargado de realizar la tarea real.</li>
+                <li><strong>Ejemplo:</strong> Si el cliente quiere encender una luz, crea un comando <code>EncenderLuz</code> que sabe cómo encender la luz, y este comando será ejecutado cuando el invocador lo invoque.</li>
+            </ul>
+
+            <h3>4. Receptor (Receiver)</h3>
+            <p>
+                El receptor es el objeto que realmente realiza la acción solicitada. El comando invoca métodos del receptor para ejecutar la tarea real. El receptor es completamente ajeno al invocador y al cliente; su única tarea es realizar el trabajo que se le ha indicado.
+            </p>
+            <ul>
+                <li><strong>Responsabilidad:</strong> El receptor es responsable de realizar la acción solicitada, como encender una luz o cambiar el volumen de un televisor.</li>
+                <li><strong>Interacción:</strong> Aunque el comando tiene una referencia al receptor, el receptor no tiene conocimiento de los invocadores o clientes que lo están utilizando. Se limita a ejecutar la acción cuando se le solicita.</li>
+                <li><strong>Ejemplo:</strong> En nuestro ejemplo, si el comando es <code>EncenderLuz</code>, el receptor sería la clase <code>Luz</code>, que tiene el método <code>encender()</code> que realiza la acción real.</li>
+            </ul>
+
+            <h3>Flujo de Interacción entre Componentes</h3>
+            <p>El flujo de interacción sigue estos pasos:</p>
+            <ol>
+                <li><strong>El cliente configura el sistema:</strong> El cliente crea los comandos concretos (como <code>EncenderLuz</code>, <code>SubirVolumen</code>), asignándolos a los invocadores.</li>
+                <li><strong>El invocador invoca los comandos:</strong> El invocador llama al método <code>execute()</code> del comando, sin saber qué acción se realizará.</li>
+                <li><strong>El comando ejecuta la acción:</strong> El comando invoca el método del receptor para ejecutar la tarea solicitada.</li>
+                <li><strong>El receptor realiza la acción:</strong> El receptor realiza la tarea solicitada, como encender la luz o subir el volumen.</li>
+            </ol>
+
+            <p>Este flujo permite un desacoplamiento total entre el invocador y el receptor, lo que mejora la flexibilidad y la mantenibilidad del código.</p>
+        </section>
+
+        <section id="ejemplo">
+            <h1>Ejemplo en Python</h1>
+            <pre>
+<code>
+# Interfaz de comando
+class Command:
+    def execute(self):
+        pass
+
+# Comando concreto para encender la luz
+class LightOnCommand(Command):
+    def __init__(self, light):
+        self.light = light
+
+    def execute(self):
+        self.light.turn_on()
+
+# Comando concreto para apagar la luz
+class LightOffCommand(Command):
+    def __init__(self, light):
+        self.light = light
+
+    def execute(self):
+        self.light.turn_off()
+
+# Receptor (el objeto que realiza la acción real)
+class Light:
+    def turn_on(self):
+        print("La luz está encendida.")
+
+    def turn_off(self):
+        print("La luz está apagada.")
+
+# Invocador (el que invoca el comando)
+class RemoteControl:
+    def __init__(self):
+        self.command = None
+
+    def set_command(self, command):
+        self.command = command
+
+    def press_button(self):
+        self.command.execute()
+
+# Uso del patrón Command
+light = Light()  # Crear el receptor
+light_on = LightOnCommand(light)  # Crear el comando para encender la luz
+light_off = LightOffCommand(light)  # Crear el comando para apagar la luz
+
+remote = RemoteControl()  # Crear el invocador (control remoto)
+
+# Encender la luz
+remote.set_command(light_on)
+remote.press_button()  # Output: La luz está encendida.
+
+# Apagar la luz
+remote.set_command(light_off)
+remote.press_button()  # Output: La luz está apagada.
+</code>
+            </pre>
+        </section>
+
+        <section id="aplicaciones">
+            <h1>Aplicaciones Prácticas</h1>
+            <h3>1. Controles Remotos (dispositivos electrónicos)</h3>
+            <p> El ejemplo de codigo que representa un control remoto para encender y apagar una luz es un caso clásico. Imagina un control remoto que no solo controle luces, sino que también controle el televisor, el aire acondicionado, o las cortinas de una casa inteligente. Usando el patrón Command, cada acción del control remoto (encender, apagar, cambiar canal, ajustar temperatura, etc.) sería un comando, y el control remoto podría invocar cada uno sin saber cómo se implementan exactamente esas acciones.</p>
+            <h4> Aplicación</h4>
+            <ul>
+                <li>Un sistema de hogar inteligente donde puedes controlar múltiples dispositivos (luces, termostatos, electrodomésticos, etc.) con un único control remoto o aplicación.</li>
+                <li>Aquí, cada acción (encender una luz, ajustar la temperatura, cambiar la música) sería un comando que se ejecuta en un receptor (por ejemplo, una luz o un termostato).</li>
+            </ul>
+            <h3>2. Juegos de Video</h3>
+            <p> En los videojuegos, las acciones que realiza el jugador (mover al personaje, atacar, saltar, etc.) pueden ser vistas como comandos que son enviados al motor del juego para que se ejecuten. Si se quiere implementar una funcionalidad de "deshacer" (como en un juego de estrategia) o "grabar acciones" (como en juegos que permiten "repetir" movimientos), el patrón Command podría ser útil.</p>
+            <h4> Aplicación</h4>
+            <ul>
+                <li>En un juego de estrategia donde el jugador mueve tropas o hace diferentes acciones, cada acción podría ser representada por un comando. Si el jugador desea "deshacer" una acción, el sistema podría ejecutar el comando contrario para revertir el cambio.</li>
+            </ul>
+            <h3>3. Sistemas de Deshacer/Rehacer (Undo/Redo)</h3>
+            <p> Supón que estás trabajando en un editor de texto o en un software de diseño gráfico. En estos programas, es común tener las opciones de deshacer (Undo) o rehacer (Redo) una acción. Para implementar esta funcionalidad, puedes utilizar el patrón Command. Cada acción realizada (por ejemplo, escribir un texto, mover un objeto) se almacena como un comando que puede ser deshecho o rehecho.</p>
+            <h4> Aplicación</h4>
+            <ul>
+                <li>En un editor de texto o cualquier aplicación de edición, cada acción que realizas (como escribir, borrar, mover) puede representarse como un comando. Estos comandos pueden almacenarse en una pila y, cuando se desea deshacer o rehacer, simplemente se invoca el comando contrario para revertir o volver a aplicar la acción.</li>
+            </ul>
+        </section>
+
+        <section id="ventajas">
+            <h1>Ventajas y Desventajas</h1>
+            <p> El patrón Command es uno de los patrones de diseño de comportamiento definidos, Este patrón encapsula una solicitud como un objeto, lo que permite parametrizar objetos con diferentes solicitudes, encolar solicitudes o incluso registrar un historial de operaciones.</p>
+            <h3>Ventajas</h3>
+            <ul>
+                <li>Desacoplamiento: El patrón separa el objeto que invoca una operación del objeto que la realiza, lo que reduce la dependencia entre ellos.</li>
+                <li>Flexibilidad: Permite cambiar o extender funcionalidades sin modificar el código del cliente ni del receptor.</li>
+                <li>Soporte para operaciones deshacer/rehacer: Como las solicitudes están encapsuladas, es fácil implementar funcionalidades como el historial de comandos para deshacer o rehacer operaciones.</li>
+                <li>Estandarización de comandos: Facilita la parametrización de invocadores, ya que todos los comandos implementan la misma interfaz.</li>
+                <li>Composición de comandos: Es posible combinar varios comandos en uno solo (comando compuesto), lo que permite realizar operaciones complejas de manera ordenada. </li>
+                <li> Reutilización: Los comandos se pueden reutilizar en diferentes contextos, especialmente si son genéricos.</li>
+            </ul>
+            <h3>Desventajas</h3>
+            <ul>
+                <li>Demasiadas clases y archivos: Para cada operación, se requiere una nueva clase que implemente el comando, lo que puede llevar a un aumento considerable en el número de archivos.</li>
+                <li>Dependencia indirecta: Aunque reduce las dependencias directas, el cliente aún debe conocer el comando que quiere usar, lo que puede introducir dependencias indirectas si no se maneja correctamente.</li>
+                <li>Dependencia indirecta: Aunque reduce las dependencias directas, el cliente aún debe conocer el comando que quiere usar, lo que puede introducir dependencias indirectas si no se maneja correctamente.</li>
+                <li>Dificultad para comandos muy simples: Para operaciones triviales, como un simple cambio de estado, usar el patrón Command puede ser excesivo.</li>
+                <li>Consumo de recurso: En aplicaciones con comandos frecuentes.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Patrón de Diseño</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
+
